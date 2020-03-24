@@ -35,7 +35,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    print(f"{member} has left")    
+    print(f"{member} has left")
 
 @client.command(aliases=['sd'])
 @commands.has_any_role("Mod")
@@ -77,7 +77,7 @@ async def _8ball(ctx, *, question):
             "My sources say no.",
             "Outlook not so good.",
             "Very doubtful."]
-    await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')        
+    await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
 
 #clear command
 @client.command()
@@ -101,7 +101,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 
 #unban
 @client.command()
-@commands.has_permissions(manage_server=True)
+@commands.has_permissions(manage_guild=True)
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -115,12 +115,35 @@ async def unban(ctx, *, member):
             return
 
 
+
 @client.command()
-@commands.has_any_role("Mod", "Admin")
-async def admin_only(ctx):
-    global money
-    money += 10000000
-    await ctx.send("Ha ha fools look at my money " + "bal: " + str(money))
+async def mute(ctx, member : discord.Member):
+    guild = ctx.guild
+
+    for role in guild.roles:
+        if role.name == "Muted(raghavbot)":
+            await member.add_roles(role)
+            await ctx.send("{} has muted {}".format(member.mention,ctx.author.mention))
+            return
+
+            overwrite = discord.PermissionOverwrite(send_messages=False)
+            new_role = await guild.create_role(name="Muted(raghavbot)")
+
+            for guild in guild.text_channels:
+                await channel.set_permissions(new_role, overwrite=overwrite)
+
+            await member.add_roles(new_role)
+            await ctx.send("{} has muted {}" .format(ctx.author.mention,member.mention))
+
+
+@client.command()
+async def unmute(ctx, member : discord.Member):
+    guild = ctx.guild
+
+    for role in guild.roles:
+        if role.name == "Muted(raghavbot)":
+            await member.remove_roles(role)
+            await ctx.send("{} has muted {}".format(ctx.author.mention,member.mention))
 
 
 @client.command()
@@ -141,7 +164,7 @@ async def oof(ctx):
 @client.command()
 async def ineedtherapy(ctx):
     await ctx.send("I will be your therapist so tell me whats happening in your life")
-    await client.wait_for('message')    
+    await client.wait_for('message')
     await ctx.send("so how did that make you feel")
 
 
@@ -150,7 +173,7 @@ async def ineedtherapy(ctx):
 
 @client.command()
 async def work(ctx):
-
+    global raghav_coins
     raghav_coins = 0
     jobs = ["You helped code a website for a startup company you recieved raghav coins", "You help out an admin in a server by setting up roles", "You contribute to an open source github repository"]
     await ctx.send('Do you want to work? (y/n)')
@@ -158,7 +181,12 @@ async def work(ctx):
     await ctx.send(random.choice(jobs))
     if message.content.lower() == 'y':
         raghav_coins += 20
-        await ctx.send("```You have " + str(raghav_coins) + " Raghav Coins```")
+        await ctx.send("You have earnt 20 raghav coins you can check your balance by doing .bal")
+
+
+@client.command()
+async def bal(ctx):
+    await ctx.send("You have " + str(raghav_coins) + " Raghav coins")
 
 
 
@@ -167,4 +195,4 @@ async def ineedagf(ctx):
     await ctx.send("Ha ha well guess what you will never get one")
 
 
-client.run("Njc2MjU1MDU2NTIxMTk5NjU2.XkDBqw.j7W0EM-lkIus11hpDkF-eIsB0qE")     
+client.run("Njc2MjU1MDU2NTIxMTk5NjU2.XnqZEg.jhQ3dRw3pvet8fXdyTF3q97R1z4")
