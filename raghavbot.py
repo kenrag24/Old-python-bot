@@ -194,5 +194,12 @@ async def bal(ctx):
 async def ineedagf(ctx):
     await ctx.send("Ha ha well guess what you will never get one")
 
-
+@client.command()
+async def ineedfriends(ctx):
+    await ctx.send("Hello im ur friend now")
+    
+    
+    
+    
+    
 client.run("Njc2MjU1MDU2NTIxMTk5NjU2.XnqZEg.jhQ3dRw3pvet8fXdyTF3q97R1z4")
