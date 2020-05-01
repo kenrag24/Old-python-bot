@@ -49,11 +49,63 @@ async def shutdown(ctx):
 async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
 
-#@client.command(aliases=['scramble', 's'])
-#async def scramble(ctx, *, sType):
-  #sType = client.wait_for("For what puzzle would you like to scramble")
-  #if (sType == "3x3"):
-      #await ctx.send("command works")
+@client.command(aliases=['scramble', 's'])
+async def scramble(ctx, sType,scrams):
+    if sType == "3x3":
+      for x in range(scrams):
+        moves = ["F","B","R","L","U","D"]
+        turns = [" ","2 ","' "]
+        scramble = []
+        usedmoves=[]
+        usedmoves1=[]
+        for i in range(20):
+                          
+          if i % 2 ==0:
+            randmoves=random.choice(moves)
+            if i>1:                      
+              while randmoves=="F" and scramble[-4]=="F" and scramble[-2]=="B":
+                randmoves=random.choice(moves)
+              while randmoves=="B" and scramble[-4]=="B" and scramble[-2]=="F":
+                randmoves=random.choice(moves)
+              while randmoves=="R" and scramble[-4]=="R" and scramble[-2]=="L":
+                randmoves=random.choice(moves)
+              while randmoves=="L" and scramble[-4]=="L" and scramble[-2]=="R":
+                randmoves=random.choice(moves)
+              while randmoves=="U" and scramble[-4]=="U" and scramble[-2]=="D":
+                randmoves=random.choice(moves)
+              while randmoves=="D" and scramble[-4]=="D" and scramble[-2]=="U":
+                randmoves=random.choice(moves)     
+            usedmoves.append(randmoves)
+            scramble.append(randmoves)
+            scramble.append(random.choice(turns))
+            moves.remove(randmoves)
+            if i != 0:
+              moves.append(usedmoves1[-1])
+
+          else:
+                              
+            randmoves1=random.choice(moves)
+            if i>1:
+              while randmoves1=="F" and scramble[-4]=="F" and scramble[-2]=="B":
+                randmoves1=random.choice(moves)
+              while randmoves=="B" and scramble[-4]=="B" and scramble[-2]=="F":
+                randmoves1=random.choice(moves)
+              while randmoves1=="R" and scramble[-4]=="R" and scramble[-2]=="L":
+                randmoves1=random.choice(moves)
+              while randmoves1=="L" and scramble[-4]=="L" and scramble[-2]=="R":
+                randmoves1=random.choice(moves)
+              while randmoves1=="U" and scramble[-4]=="U" and scramble[-2]=="D":
+                randmoves1=random.choice(moves)
+              while randmoves1=="D" and scramble[-4]=="D" and scramble[-2]=="U":
+                randmoves1=random.choice(moves) 
+            scramble.append(randmoves1)
+            usedmoves1.append(randmoves1)
+            scramble.append(random.choice(turns))
+            moves.remove(randmoves1)
+            moves.append(usedmoves[-1])
+        c="".join(scramble)
+        await ctx.send("""{}
+      ----""".format(c))
 
 @client.command(aliases= ['8ball', 'test'])
 async def _8ball(ctx, *, question):
@@ -148,7 +200,8 @@ async def unmute(ctx, member : discord.Member):
 
 @client.command()
 async def ineedfriends(ctx):
-    await ctx.send("I will be your friend :)")
+    member=random.choice(ctx.guild.members)
+    await ctx.send(f"I found you a potential friend! Try sending {member} a friend request!")
 
 
 @client.command()
